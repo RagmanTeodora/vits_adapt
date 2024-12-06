@@ -67,8 +67,16 @@ def convert_to_ascii(text):
 
 def basic_cleaners(text):
   '''Basic pipeline that lowercases and collapses whitespace without transliteration.'''
+  '''
   text = lowercase(text)
   text = collapse_whitespace(text)
+  '''
+  
+  text = lowercase(text)
+  #text = convert_to_ascii(text) # romanian contains non-ASCII characters => undecode returns a string that can be safely encoded to ASCII (ș -> s and so on)
+  #text = expand_abbreviations(text) # no abbr. established for ro - yet
+  phonemes = phonemize(text, language='ro', backend='espeak', strip=True, preserve_punctuation=True, with_stress=True)
+  text = collapse_whitespace(phonemes)
   return text
 
 
